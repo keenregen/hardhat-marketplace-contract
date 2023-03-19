@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.7;
 
-// Marketplace v2 (struct addition)
+// Marketplace v3 (some optimizations)
 
-contract Marketplace2 {
+contract Marketplace {
+     uint internal productsLength = 0;
+
      struct Product {
           address payable owner;
           string name;
@@ -17,7 +19,6 @@ contract Marketplace2 {
      mapping(uint => Product) internal products;
 
      function writeProduct(
-          uint _index,
           string memory _name,
           string memory _image,
           string memory _description,
@@ -25,7 +26,7 @@ contract Marketplace2 {
           uint _price
      ) public {
           uint _sold = 0;
-          products[_index] = Product(
+          products[productsLength] = Product(
                payable(msg.sender),
                _name,
                _image,
@@ -34,6 +35,7 @@ contract Marketplace2 {
                _price,
                _sold
           );
+          productsLength++;
      }
 
      function readProduct(
@@ -60,5 +62,9 @@ contract Marketplace2 {
                products[_index].price,
                products[_index].sold
           );
+     }
+
+     function getProductsLength() public view returns (uint) {
+          return (productsLength);
      }
 }
